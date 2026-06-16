@@ -1,0 +1,33 @@
+# Environment & Secrets
+.env
+.env.*
+
+# Dependencies (will be installed fresh in Docker)
+node_modules
+
+# Strapi build cache
+.tmp
+.cache
+build
+dist
+.strapi
+
+# Logs
+*.log
+logs
+
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile
+.dockerignore
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode
+.idea

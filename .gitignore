@@ -15,7 +15,6 @@ build/
 
 # Docker (if you remove it)
 docker-compose.yml
-Dockerfile
 
 # Logs
 *.log
