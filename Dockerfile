@@ -51,7 +51,6 @@ RUN npm ci --omit=dev
 
 # Copy built app from build stage
 COPY --from=build /app/build ./build
-COPY --from=build /app/dist ./dist
 COPY --from=build /app/.strapi ./.strapi
 
 # Copy source (needed at runtime for Strapi)
