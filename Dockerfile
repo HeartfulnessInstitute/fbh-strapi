@@ -33,10 +33,13 @@ RUN npm run build
 # ================================
 FROM node:18-alpine AS production
 
-# Install runtime system dependencies only
+# Install runtime + native module build dependencies
 RUN apk add --no-cache \
     vips-dev \
-    libpng-dev
+    libpng-dev \
+    build-base \
+    python3 \
+    git
 
 WORKDIR /app
 
