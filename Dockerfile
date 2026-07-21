@@ -1,7 +1,7 @@
 # ================================
 # Stage 1: Build
 # ================================
-FROM node:18-alpine AS build
+FROM node:20-alpine AS build
 
 # Install system dependencies required for native modules (sharp, vips, etc.)
 RUN apk add --no-cache \
@@ -31,7 +31,7 @@ RUN npm run build
 # ================================
 # Stage 2: Production
 # ================================
-FROM node:18-alpine AS production
+FROM node:20-alpine AS production
 
 # Install runtime system dependencies only
 RUN apk add --no-cache \
