@@ -33,13 +33,10 @@ RUN npm run build
 # ================================
 FROM node:18-alpine AS production
 
-# Install runtime + native module build dependencies
+# Install runtime system dependencies only
 RUN apk add --no-cache \
     vips-dev \
-    libpng-dev \
-    build-base \
-    python3 \
-    git
+    libpng-dev
 
 WORKDIR /app
 
@@ -51,13 +48,14 @@ RUN npm ci --omit=dev
 
 # Copy built app from build stage
 COPY --from=build /app/build ./build
+COPY --from=build /app/dist ./dist
 COPY --from=build /app/.strapi ./.strapi
 
 # Copy source (needed at runtime for Strapi)
 COPY --from=build /app/src ./src
 COPY --from=build /app/config ./config
 COPY --from=build /app/public ./public
-RUN mkdir -p database/migrations
+COPY --from=build /app/database ./database
 
 # Strapi runs on port 1337 by default
 EXPOSE 1337
