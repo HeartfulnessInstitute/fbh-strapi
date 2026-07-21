@@ -1,8 +1,8 @@
-name: Build and Push to ECR (dev)
+name: Build and Push to ECR
 
 on:
   push:
-    branches: [dev]
+    branches: [dev, staging, main]
   workflow_dispatch:
 
 env:
@@ -16,7 +16,7 @@ permissions:
 
 jobs:
   build-push:
-    name: Build and Push (dev)
+    name: Build and Push
     runs-on: ubuntu-latest
 
     steps:
