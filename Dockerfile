@@ -55,7 +55,7 @@ COPY --from=build /app/.strapi ./.strapi
 COPY --from=build /app/src ./src
 COPY --from=build /app/config ./config
 COPY --from=build /app/public ./public
-COPY --from=build /app/database ./database
+RUN mkdir -p database/migrations
 
 # Strapi runs on port 1337 by default
 EXPOSE 1337
