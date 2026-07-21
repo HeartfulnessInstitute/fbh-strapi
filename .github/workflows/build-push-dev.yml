@@ -33,20 +33,31 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Set image tag
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: arm64
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Set semantic version tag
         id: tags
         run: |
-          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
-          echo "sha_tag=dev-${SHORT_SHA}" >> $GITHUB_OUTPUT
+          PKG_VERSION=$(node -p "require('./package.json').version")
+          echo "version_tag=v${PKG_VERSION}-dev.${{ github.run_number }}" >> $GITHUB_OUTPUT
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ steps.tags.outputs.sha_tag }}
+          # Multi-arch so the same tag works whether nodes are x86 (t3) or
+          # Graviton/ARM (t4g) — needed before any node group can switch to t4g.
+          platforms: linux/amd64,linux/arm64
+          tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ steps.tags.outputs.version_tag }}
 
       - name: Summary
         run: |
           echo "### Image pushed to ECR" >> $GITHUB_STEP_SUMMARY
-          echo "- \`${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ steps.tags.outputs.sha_tag }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- \`${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ steps.tags.outputs.version_tag }}\`" >> $GITHUB_STEP_SUMMARY
