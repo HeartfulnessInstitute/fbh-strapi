@@ -1,7 +1,7 @@
 # ================================
 # Stage 1: Build
 # ================================
-FROM node:18-alpine AS build
+FROM node:20-alpine AS build
 
 # Install system dependencies required for native modules (sharp, vips, etc.)
 RUN apk add --no-cache \
@@ -31,7 +31,7 @@ RUN npm run build
 # ================================
 # Stage 2: Production
 # ================================
-FROM node:18-alpine AS production
+FROM node:20-alpine AS production
 
 # Install runtime system dependencies only
 RUN apk add --no-cache \
@@ -48,14 +48,13 @@ RUN npm ci --omit=dev
 
 # Copy built app from build stage
 COPY --from=build /app/build ./build
-COPY --from=build /app/dist ./dist
 COPY --from=build /app/.strapi ./.strapi
 
 # Copy source (needed at runtime for Strapi)
 COPY --from=build /app/src ./src
 COPY --from=build /app/config ./config
 COPY --from=build /app/public ./public
-COPY --from=build /app/database ./database
+RUN mkdir -p database/migrations
 
 # Strapi runs on port 1337 by default
 EXPOSE 1337
