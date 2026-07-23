@@ -1,0 +1,44 @@
+{
+  "kind": "collectionType",
+  "collectionName": "project_updates",
+  "info": {
+    "singularName": "project-update",
+    "pluralName": "project-updates",
+    "displayName": "ProjectUpdate"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "project": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::project.project",
+      "inversedBy": "project_updates"
+    },
+    "date": {
+      "type": "date",
+      "required": true
+    },
+    "Media": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "remarks": {
+      "type": "text",
+      "required": false
+    },
+    "deleted": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    }
+  }
+}

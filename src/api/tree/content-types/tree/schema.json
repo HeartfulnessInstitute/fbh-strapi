@@ -1,0 +1,61 @@
+{
+  "kind": "collectionType",
+  "collectionName": "trees",
+  "info": {
+    "singularName": "tree",
+    "pluralName": "trees",
+    "displayName": "Tree"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "tree_id": {
+      "type": "integer",
+      "required": true,
+      "unique": true,
+      "min": 11111,
+      "max": 999999
+    },
+    "habitat": {
+      "type": "enumeration",
+      "required": true,
+      "default": "Tree",
+      "enum": [
+        "Tree",
+        "Small Tree"
+      ]
+    },
+    "specie": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::specie.specie",
+      "inversedBy": "trees"
+    },
+    "project": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::project.project",
+      "inversedBy": "trees"
+    },
+    "deleted": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    },
+    "geodata": {
+      "type": "customField",
+      "customField": "plugin::geodata.geojson",
+      "options": {
+        "info": true
+      }
+    },
+    "tree_updates": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::tree-update.tree-update",
+      "mappedBy": "tree"
+    }
+  }
+}

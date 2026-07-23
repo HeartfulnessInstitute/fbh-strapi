@@ -1,0 +1,38 @@
+{
+  "kind": "singleType",
+  "collectionName": "social_links",
+  "info": {
+    "singularName": "social-link",
+    "pluralName": "social-links",
+    "displayName": "SocialLink"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "youtube_url": {
+      "type": "text"
+    },
+    "linkedin_url": {
+      "type": "text"
+    },
+    "instagram_url": {
+      "type": "text"
+    },
+    "facebook_url": {
+      "type": "text"
+    },
+    "x_url": {
+      "type": "text"
+    },
+    "appstore_url": {
+      "type": "text",
+      "required": true
+    },
+    "playstore_url": {
+      "type": "text",
+      "required": true
+    }
+  }
+}

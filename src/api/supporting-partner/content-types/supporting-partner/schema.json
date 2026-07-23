@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "supporting_partners",
+  "info": {
+    "singularName": "supporting-partner",
+    "pluralName": "supporting-partners",
+    "displayName": "SupportingPartner"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "logo": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    },
+    "company_url": {
+      "type": "text"
+    }
+  }
+}

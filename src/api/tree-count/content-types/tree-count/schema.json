@@ -1,0 +1,35 @@
+{
+  "kind": "collectionType",
+  "collectionName": "tree_counts",
+  "info": {
+    "singularName": "tree-count",
+    "pluralName": "tree-counts",
+    "displayName": "TreeCount"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "project": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::project.project",
+      "inversedBy": "tree_counts"
+    },
+    "specie": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::specie.specie",
+      "inversedBy": "tree_counts"
+    },
+    "non_geotagged_trees": {
+      "type": "integer",
+      "required": true
+    },
+    "geotagged_trees": {
+      "type": "integer",
+      "required": true
+    }
+  }
+}
