@@ -1,0 +1,113 @@
+{
+  "kind": "collectionType",
+  "collectionName": "species",
+  "info": {
+    "singularName": "specie",
+    "pluralName": "species",
+    "displayName": "Specie"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "common_name": {
+      "type": "string",
+      "required": true
+    },
+    "scientific_name": {
+      "type": "string",
+      "required": true
+    },
+    "images": {
+      "type": "media",
+      "multiple": true,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "lifespan": {
+      "type": "string",
+      "required": true
+    },
+    "oxygen_released": {
+      "type": "string",
+      "required": true
+    },
+    "max_height": {
+      "type": "string",
+      "required": true
+    },
+    "faq1_question": {
+      "type": "string",
+      "required": true
+    },
+    "faq1_answer": {
+      "type": "text",
+      "required": true
+    },
+    "faq2_question": {
+      "type": "string",
+      "required": true
+    },
+    "faq2_answer": {
+      "type": "text",
+      "required": true
+    },
+    "faq3_question": {
+      "type": "string",
+      "required": true
+    },
+    "faq3_answer": {
+      "type": "text",
+      "required": true
+    },
+    "faq4_question": {
+      "type": "string",
+      "required": true
+    },
+    "faq4_answer": {
+      "type": "text",
+      "required": true
+    },
+    "faq5_question": {
+      "type": "string"
+    },
+    "faq5_answer": {
+      "type": "text"
+    },
+    "trees": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::tree.tree",
+      "mappedBy": "specie"
+    },
+    "projects": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::project.project",
+      "mappedBy": "species"
+    },
+    "tree_counts": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::tree-count.tree-count",
+      "mappedBy": "specie"
+    },
+    "popular": {
+      "type": "boolean",
+      "default": false
+    },
+    "deleted": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    }
+  }
+}

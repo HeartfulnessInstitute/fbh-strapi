@@ -1,0 +1,46 @@
+{
+  "kind": "collectionType",
+  "collectionName": "plant_rates",
+  "info": {
+    "singularName": "plant-rate",
+    "pluralName": "plant-rates",
+    "displayName": "PlantRate"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "currency_code": {
+      "type": "enumeration",
+      "required": true,
+      "default": "INR",
+      "enum": [
+        "INR",
+        "USD"
+      ]
+    },
+    "country_icon": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    },
+    "geotagged_rate": {
+      "type": "integer",
+      "required": true
+    },
+    "non_geotagged_rate": {
+      "type": "integer",
+      "required": true
+    },
+    "deleted": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    }
+  }
+}

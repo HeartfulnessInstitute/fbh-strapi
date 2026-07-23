@@ -1,0 +1,18 @@
+{
+  "kind": "singleType",
+  "collectionName": "need_supports",
+  "info": {
+    "singularName": "need-support",
+    "pluralName": "need-supports",
+    "displayName": "NeedSupport"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "needsupport_url": {
+      "type": "text"
+    }
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "kind": "singleType",
+  "collectionName": "globals",
+  "info": {
+    "singularName": "global",
+    "pluralName": "globals",
+    "displayName": "Global"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "projects_list_headerimage": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    },
+    "species_list_headerimage": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    },
+    "about_us_hearderimage": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    },
+    "our_team_headerimage": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    },
+    "sample_certificate": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    },
+    "co2_sequestation": {
+      "type": "integer",
+      "required": true
+    },
+    "default_attribute": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::attribute.attribute"
+    },
+    "avatar": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    },
+    "copyright": {
+      "type": "richtext",
+      "required": true
+    },
+    "admin_login_image": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "kind": "singleType",
+  "collectionName": "useful_links",
+  "info": {
+    "singularName": "useful-link",
+    "pluralName": "useful-links",
+    "displayName": "UsefulLink"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "label1": {
+      "type": "string",
+      "required": true
+    },
+    "url1": {
+      "type": "text",
+      "required": true
+    },
+    "label2": {
+      "type": "string",
+      "required": true
+    },
+    "url2": {
+      "type": "text",
+      "required": true
+    },
+    "label3": {
+      "type": "string",
+      "required": true
+    },
+    "url3": {
+      "type": "text",
+      "required": true
+    },
+    "label4": {
+      "type": "string",
+      "required": true
+    },
+    "url4": {
+      "type": "text",
+      "required": true
+    },
+    "label5": {
+      "type": "string",
+      "required": true
+    },
+    "url5": {
+      "type": "text",
+      "required": true
+    },
+    "label6": {
+      "type": "string",
+      "required": true
+    },
+    "url6": {
+      "type": "text",
+      "required": true
+    }
+  }
+}
