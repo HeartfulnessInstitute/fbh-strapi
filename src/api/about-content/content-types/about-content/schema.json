@@ -1,0 +1,139 @@
+{
+  "kind": "singleType",
+  "collectionName": "about_contents",
+  "info": {
+    "singularName": "about-content",
+    "pluralName": "about-contents",
+    "displayName": "AboutContent"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "total_trees_planted": {
+      "type": "string",
+      "required": true
+    },
+    "total_planting_sites": {
+      "type": "string",
+      "required": true
+    },
+    "total_volunteers_engaged": {
+      "type": "string",
+      "required": true
+    },
+    "total_partner_organisations": {
+      "type": "string",
+      "required": true
+    },
+    "total_countries": {
+      "type": "string",
+      "required": true
+    },
+    "total_practitioners": {
+      "type": "string",
+      "required": true
+    },
+    "total_trainers": {
+      "type": "string",
+      "required": true
+    },
+    "total_meditation_centres": {
+      "type": "string",
+      "required": true
+    },
+    "our_origin_one": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    },
+    "our_origin_two": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    },
+    "our_journey_one": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    },
+    "our_journey_two": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    },
+    "our_journey_three": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    },
+    "our_journey_four": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "our_journey_five": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    },
+    "our_journey_six": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    },
+    "our_journey_seven": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    },
+    "kanha_shanti_vanam": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    }
+  }
+}

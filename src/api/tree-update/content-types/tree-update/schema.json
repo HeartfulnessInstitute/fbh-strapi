@@ -1,0 +1,43 @@
+{
+  "kind": "collectionType",
+  "collectionName": "tree_updates",
+  "info": {
+    "singularName": "tree-update",
+    "pluralName": "tree-updates",
+    "displayName": "TreeUpdate"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "tree": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::tree.tree",
+      "inversedBy": "tree_updates"
+    },
+    "date": {
+      "type": "date",
+      "required": true
+    },
+    "remarks": {
+      "type": "text",
+      "required": false
+    },
+    "media": {
+      "type": "media",
+      "multiple": true,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    },
+    "deleted": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    }
+  }
+}

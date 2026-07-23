@@ -1,0 +1,24 @@
+{
+  "kind": "singleType",
+  "collectionName": "our_team_contents",
+  "info": {
+    "singularName": "our-team-content",
+    "pluralName": "our-team-contents",
+    "displayName": "OurTeamContent"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "gallery": {
+      "type": "media",
+      "multiple": true,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    }
+  }
+}
