@@ -1,8 +1,13 @@
-name: Build and Push to ECR (dev)
+name: Build and Push Image to ECR
 
+# Single build pipeline for the whole app: builds once from main and pushes
+# to dev's ECR. Staging deploys the same image by referencing its tag
+# directly (dev's ECR already grants staging's account cross-account pull —
+# no separate staging build). Prod is a separate, manual promotion step
+# after QA sign-off, not handled by this workflow.
 on:
   push:
-    branches: [dev]
+    branches: [main]
   workflow_dispatch:
 
 env:
@@ -15,10 +20,21 @@ permissions:
   contents: read
 
 jobs:
-  build-push:
-    name: Build and Push (dev)
-    runs-on: ubuntu-latest
-
+  # Built natively per-architecture (no QEMU) — this Dockerfile compiles
+  # native C/C++ modules (vips/sharp) from source, which is extremely slow
+  # and prone to hanging under QEMU emulation on arm64.
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: linux/amd64
+            runner: ubuntu-latest
+          - platform: linux/arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
+    outputs:
+      version_tag: ${{ steps.tags.outputs.version_tag }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,30 +46,77 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to Amazon ECR
-        id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Set image tags
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Set semantic version tag
         id: tags
         run: |
-          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
-          BRANCH="${{ github.ref_name }}"
-          echo "sha_tag=${BRANCH}-${SHORT_SHA}" >> $GITHUB_OUTPUT
-          echo "branch_tag=${BRANCH}-latest" >> $GITHUB_OUTPUT
+          PKG_VERSION=$(node -p "require('./package.json').version")
+          echo "version_tag=v${PKG_VERSION}-dev.${{ github.run_number }}" >> $GITHUB_OUTPUT
 
-      - name: Build and push Docker image
+      - name: Set platform pair
+        id: platform
+        run: |
+          platform=${{ matrix.platform }}
+          echo "pair=${platform//\//-}" >> $GITHUB_OUTPUT
+
+      - name: Build and push by digest
+        id: build
         uses: docker/build-push-action@v5
         with:
           context: .
-          push: true
-          tags: |
-            ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ steps.tags.outputs.sha_tag }}
-            ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ steps.tags.outputs.branch_tag }}
-          cache-from: type=registry,ref=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ steps.tags.outputs.branch_tag }}
-          cache-to: type=inline
+          platforms: ${{ matrix.platform }}
+          outputs: type=image,name=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }},push-by-digest=true,name-canonical=true,push=true
+
+      - name: Export digest
+        run: |
+          mkdir -p /tmp/digests
+          digest="${{ steps.build.outputs.digest }}"
+          touch "/tmp/digests/${digest#sha256:}"
+
+      - name: Upload digest
+        uses: actions/upload-artifact@v4
+        with:
+          name: digests-${{ steps.platform.outputs.pair }}
+          path: /tmp/digests/*
+          if-no-files-found: error
+          retention-days: 1
+
+  # Combines the two single-arch images (by digest) into one multi-arch tag.
+  merge:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::502390415551:role/github-actions-fbh-ecr-push
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Download digests
+        uses: actions/download-artifact@v4
+        with:
+          path: /tmp/digests
+          pattern: digests-*
+          merge-multiple: true
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Create manifest list and push
+        working-directory: /tmp/digests
+        run: |
+          docker buildx imagetools create \
+            -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ needs.build.outputs.version_tag }} \
+            $(printf '${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}@sha256:%s ' *)
 
       - name: Summary
         run: |
           echo "### Image pushed to ECR" >> $GITHUB_STEP_SUMMARY
-          echo "- \`${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ steps.tags.outputs.sha_tag }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- \`${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ steps.tags.outputs.branch_tag }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- \`${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ needs.build.outputs.version_tag }}\`" >> $GITHUB_STEP_SUMMARY
