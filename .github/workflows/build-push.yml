@@ -1,8 +1,13 @@
-name: Build and Push to ECR (dev)
+name: Build and Push Image to ECR
 
+# Single build pipeline for the whole app: builds once from main and pushes
+# to dev's ECR. Staging deploys the same image by referencing its tag
+# directly (dev's ECR already grants staging's account cross-account pull —
+# no separate staging build). Prod is a separate, manual promotion step
+# after QA sign-off, not handled by this workflow.
 on:
   push:
-    branches: [dev]
+    branches: [main]
   workflow_dispatch:
 
 env:
