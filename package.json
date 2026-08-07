@@ -24,7 +24,7 @@
     "pg": "8.8.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-router-dom": "^6.0.0",
+    "react-router-dom": "^6.30.4",
     "strapi-geodata": "^0.1.2",
     "strapi-plugin-tablify": "^1.0.3",
     "styled-components": "^6.0.0"
