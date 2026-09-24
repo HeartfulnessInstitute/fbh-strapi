@@ -51,11 +51,43 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Set semantic version tag
+      - name: Compute next semantic version tag
         id: tags
         run: |
-          PKG_VERSION=$(node -p "require('./package.json').version")
-          echo "version_tag=v${PKG_VERSION}-dev.${{ github.run_number }}" >> $GITHUB_OUTPUT
+          # Auto-incrementing patch (v0.1.N) — replaces the old
+          # v0.1.0-dev.{run_number} scheme, where "0.1.0" was a static
+          # value read from package.json and never actually bumped, so the
+          # tag only looked like semver (the run number was the only thing
+          # that ever changed). Finds the highest existing v0.1.N tag in
+          # ECR and increments the patch; starts at v0.1.1 if none exist
+          # yet (old "-dev.N"-style tags don't match this pattern, so they
+          # won't collide with the new numbering). Same mechanism as
+          # short-message-proxy's build-push-eks.yml. Runs identically in
+          # both matrix legs (amd64/arm64) — deterministic given the same
+          # ECR state, so both compute the same tag for the merge step.
+          # No 2>/dev/null on purpose — a permission/API error must fail
+          # loudly, not silently fall back to v0.1.1 and collide with an
+          # already-pushed immutable tag.
+          DESCRIBE_OUTPUT=$(aws ecr describe-images \
+            --repository-name "${{ env.ECR_REPOSITORY }}" \
+            --region "${{ env.AWS_REGION }}" \
+            --query 'imageDetails[].imageTags[]' --output text)
+
+          LATEST=$(echo "$DESCRIBE_OUTPUT" \
+            | tr '\t' '\n' \
+            | grep -E '^v0\.1\.[0-9]+$' \
+            | sed 's/^v0\.1\.//' \
+            | sort -n \
+            | tail -1 || true)
+
+          if [ -z "$LATEST" ]; then
+            NEXT="v0.1.1"
+          else
+            NEXT="v0.1.$((LATEST + 1))"
+          fi
+
+          echo "version_tag=$NEXT" >> $GITHUB_OUTPUT
+          echo "Next tag: $NEXT"
 
       - name: Set platform pair
         id: platform
